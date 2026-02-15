@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from typing import Optional
 from datetime import datetime
 from enum import Enum
 
@@ -6,18 +7,23 @@ from enum import Enum
 #     active = "active"
 #     completed = "completed"
 
-class CompetitionCreate(BaseModel):
+class CompetitionBase(BaseModel):
     title: str
-    finished_at: datetime
+    description: Optional[str] = None
+    evaluation_criteria: Optional[str] = None
+    is_active: bool = True
+
 
 # class CompetitionUpdateStatus(BaseModel):
 #     status: StatusEnum
 
-class CompetitionRead(BaseModel):
+class CompetitionRead(CompetitionBase):
     id: int
-    title: str
-    finished_at: datetime
+    created_at: datetime
     created_by: int
-    
+
     class Config:
         from_attributes = True
+
+class CompetitionCreate(CompetitionBase):
+    pass   

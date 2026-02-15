@@ -79,30 +79,12 @@ Article Evaluation is an application for managing article writing competitions, 
 
 ## API Endpoints
 
-### Users
-- `POST /users/register` - User registration
-- `POST /users/login` - User login
-- `GET /users/{user_id}` - Get user details
+### Auth
+- `POST /auth/register` - User registration
+- `POST /auth/login` - User login
 
-### Competitions
-- `POST /competitions` - Create competition
-- `GET /competitions` - List all competitions
-- `GET /competitions/{competition_id}` - Get competition details
-- `PUT /competitions/{competition_id}` - Update competition
-- `DELETE /competitions/{competition_id}` - Delete competition
-
-### Submissions
-- `POST /submissions` - Submit article
-- `GET /submissions/{submission_id}` - Get submission details
-- `GET /competitions/{competition_id}/submissions` - List competition submissions
-
-### Evaluations
-- `POST /evaluations` - Create evaluation
-- `GET /evaluations/{evaluation_id}` - Get evaluation details
-- `GET /submissions/{submission_id}/evaluations` - List submission evaluations
-
-### Rankings
-- `GET /competitions/{competition_id}/rankings` - Get competition rankings
+### Admin
+- `POST /admin/competition` - Create competition
 
 ---
 
@@ -112,15 +94,18 @@ Article Evaluation is an application for managing article writing competitions, 
 ### Users
 - `id` (Primary Key)
 - `email` (Unique)
-- `username`
+- `username` (String)
 - `password` (Hashed)
-- `role` (Admin/Competitor)
+- `role` (ADMIN/COMPETITOR)
 
 ### Competitions
 - `id` (Primary Key)
-- `title`
-- `finished_at` (DateTime)
+- `title` (String)
+- `description` (Text)
+- `evaluation_criteria` (Text)
 - `created_by` (Foreign Key -> Users)
+- `is_active` (Boolean)
+- `created_at`
 
 ### Submissions
 - `id` (Primary Key)
@@ -128,19 +113,12 @@ Article Evaluation is an application for managing article writing competitions, 
 - `submitted_at` (DateTime)
 - `competitor_id` (Foreign Key -> Users)
 - `competition_id` (Foreign Key -> Competitions)
-
-### Evaluations
-- `id` (Primary Key)
+- `feedback` (TEXT)
 - `score` (Integer)
-- `feedback` (Text)
-- `evaluated_at` (DateTime)
-- `submission_id` (Foreign Key -> Submissions)
+- `evaluated_at`
+- `status` (Pending, Evaluated)
 
-### Rankings
-- `id` (Primary Key)
-- `rank` (Integer)
-- `competition_id` (Foreign Key -> Competitions)
-- `submission_id` (Foreign Key -> Submissions)
+
 
 
 ## Authentication

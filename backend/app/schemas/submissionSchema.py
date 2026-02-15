@@ -1,20 +1,23 @@
 from pydantic import BaseModel
+from typing import Optional
 from datetime import datetime
 
-class SubmissionCreate(BaseModel):
+class SubmissionBase(BaseModel):
     content: str
-
-class SubmissionRead(SubmissionCreate):
-    content: str
-    submitted_at: datetime
-    competitor_id: int
     competition_id: int
+
+class SubmissionCreate(SubmissionBase):
+    pass
+
+class SubmissionRead(SubmissionBase):
+    id: int
+    submitted_at: datetime
+    competition_id: int
+    feedback: Optional[str] = None
+    score: Optional[int] = None
+    evaluated_at: Optional[datetime] = None
+    status: str
+
     class Config:
         from_attributes = True
-
-class SubmissionWithRanking(SubmissionRead): 
-    rankings: list
-
-class SubmissionWithCompetitor(SubmissionRead):
-    competitor: dict
     

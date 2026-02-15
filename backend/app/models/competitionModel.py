@@ -1,17 +1,18 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, DateTime
-from sqlalchemy.orm import relationship
+from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, Text, Boolean
+from sqlalchemy.sql import func
 from app.core.database import Base
-from datetime import datetime
+
 
 
 
 class Competition(Base):
     __tablename__="competitions"
+
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String, nullable=False)
-    finished_at = Column(DateTime, nullable=False)
+    description = Column(Text)
+    evaluation_criteria = Column(Text)
     created_by = Column(Integer, ForeignKey("users.id"))
-    admin = relationship("User", back_populates="competitions")
     
-    submissions = relationship("Submission", back_populates="competition", cascade="all, delete")
-    rankings = relationship("Ranking", back_populates="competition", cascade="all, delete")
+    is_active = Column(Boolean, default=True)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())

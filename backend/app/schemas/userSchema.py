@@ -1,39 +1,27 @@
 from pydantic import EmailStr, BaseModel, Field
+from typing import Optional
 from enum import Enum
 
 
-class Role(str, Enum):
-    ADMIN = "admin"
-    USER = "competitor"
 
-class UserCreate(BaseModel):
+class UserBase(BaseModel):
     email: EmailStr
     username: str
+
+
+class UserCreate(UserBase):
     password: str = Field(min_length=8)
-    role: Role
-
-
+    role: Optional[str] = "competitor"
 
 class UserLogin(BaseModel):
-    email: str
+    email: EmailStr
     password: str
 
-
-class UserRead(BaseModel):
+class UserRead(UserBase):
     id: int
-    email: EmailStr
-    username: str
     role: str
 
     class Config:
         from_attributes = True
 
 
-class UserWithRanking(BaseModel):
-    id: int
-    email: EmailStr
-    username: str
-    role: str
-
-    class Config:
-        from_attributes = True

@@ -1,21 +1,31 @@
 from app.repositories import competitionRepository
-from app.repositories import userRepository
 from app.schemas import competitionSchema
-from app.core import auth
-from fastapi import HTTPException, status
-import logging as log
-from datetime import datetime
+from sqlalchemy.ext.asyncio import AsyncSession
+from fastapi import HTTPException
 
 
-async def create_competition(competition: competitionSchema.CompetitionCreate, db, user_id):
+async def create_competition(db: AsyncSession, competition: competitionSchema.CompetitionCreate, user_id: int):
 
-    if competition.finished_at <= datetime.utcnow():
-        log.error("Evaluation finish time must be in the future")
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
-                            detail="Evaluation finish time must be in the future")
+    meta_data: dict = {
+        "title": competition.title, 
+        "description": competition.description,
+        "evaluation_criteria": competition.evaluation_criteria,
+        "is_active" : competition.is_active,
+        "created_by": user_id
+    }
+    return await competitionRepository.create(db, meta_data=meta_data)
+
+
+async def active_competitions(db: AsyncSession):
+    db_competitions = await competitionRepository.get_active_competitions(db=db)
+    if db_competitions:
+        return db_competitions
     
-    db_competition = await competitionRepository.insert_competition(db=db,
-                                                                    competition=competition,
-                                                                    user_id=user_id)
+    raise HTTPException(detail="There is No Active Competions!")
+
+async def competition_by_id(db: AsyncSession, competition_id: int):
+    db_competitions = await competitionRepository.get_by_id(db=db, competition_id=competition_id)
+    if db_competitions:
+        return db_competitions
     
-    return db_competition
+    raise HTTPException(detail=f"No competition found with this id:{competition_id}")

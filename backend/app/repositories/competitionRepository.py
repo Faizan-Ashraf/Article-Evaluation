@@ -1,20 +1,31 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
-from sqlalchemy.orm import selectinload
-from app.models import competitionModel, userModel
-from app.schemas import competitionSchema, userSchema
+from app.models.competitionModel import Competition
 
-async def insert_competition(db, competition: competitionSchema.CompetitionCreate, user_id:int):
-    db_competition = competitionModel.Competition(title = competition.title, finished_at = competition.finished_at, created_by = user_id)
+
+async def create(db: AsyncSession, meta_data: dict):
+    db_competition = Competition(
+        title= meta_data.get("title"),
+        description=meta_data.get("description"),
+        evaluation_criteria = meta_data.get("evaluation_criteria"),
+        created_by = meta_data.get("created_by"),
+        is_active = meta_data.get("is_active")
+    )
     db.add(db_competition)
     await db.commit()
-    await db.refresh(db_competition)
+    await db.refresh(db_competition) 
     return db_competition
+    
 
-async def get_competition(db, title: str = None, id: int = None):
-    if id is not None:
-        result = await db.execute(select(competitionModel.Competition).where(competitionModel.Competition.id==id))
-    else:
-        result = await db.execute(select(competitionModel.Competition).where(competitionModel.Competition.title==title))
+async def get_competitions(db: AsyncSession, skip: int = 0, limit: int = 10):
+    result = await db.execute(select(Competition).offset(skip).limit(limit))
+    return result.scalars()
+
+async def get_active_competitions(db: AsyncSession):
+    result = await db.execute(select(Competition).where(Competition.is_active==True))
+    return result.scalars()
+
+async def get_by_id(db: AsyncSession, competition_id: int):
+    result = await db.execute(select(Competition).where(Competition.id==competition_id))
     return result.scalar_one_or_none()
 

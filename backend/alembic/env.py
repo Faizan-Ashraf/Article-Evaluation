@@ -11,8 +11,6 @@ load_dotenv()
 
 from app.models.userModel import User
 from app.models.competitionModel import Competition
-from app.models.evaluationModel import Evaluation
-from app.models.rankingModel import Ranking
 from app.models.submissionsModel import Submission
 
 

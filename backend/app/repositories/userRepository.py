@@ -12,8 +12,8 @@ async def get_users(db: AsyncSession):
     result = await db.execute(select(userModel.User))
     return result.scalars().all()
 
-async def insert_new_user(db:AsyncSession, user: userSchema.UserCreate):
-    db_user = userModel.User(email=user.email,username=user.username, password=user.password,role=user.get("role"))
+async def register_new_user(db:AsyncSession, user: userSchema.UserCreate):
+    db_user = userModel.User(email=user.email,username=user.username, password=user.password,role=user.role)
     db.add(db_user)
     await db.commit()
     await db.refresh(db_user)

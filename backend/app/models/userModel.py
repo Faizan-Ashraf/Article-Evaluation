@@ -1,8 +1,11 @@
 from app.core.database import Base
-from sqlalchemy import Column, Integer, String
-from sqlalchemy.orm import relationship
-from .competitionModel import Competition
+from sqlalchemy import Column, Integer, String, Enum as SQLEnum
+from enum import Enum
 
+
+class Role(Enum):
+    ADMIN = "admin"
+    COMPETITOR = "competitor"
 
 
 class User(Base):
@@ -11,10 +14,4 @@ class User(Base):
     email = Column(String, unique=True, index=True, nullable=False)
     username = Column(String)
     password = Column(String)
-    role = Column(String, nullable=False)
-    competitions = relationship("Competition", back_populates="admin")
-
-    submissions = relationship("Submission", back_populates="competitor")
-
-
-
+    role = Column(SQLEnum(Role, name="role"), nullable=False, default=Role.COMPETITOR)

@@ -21,5 +21,5 @@ sessionLocal = sessionmaker(
 
 Base = declarative_base()
 
-# Import all models to register them with Base
-from app.models import userModel, competitionModel, submissionsModel, rankingModel, evaluationModel
+
+from app.models import userModel, competitionModel, submissionsModel
