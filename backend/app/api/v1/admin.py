@@ -2,7 +2,7 @@ from fastapi import APIRouter, status, HTTPException, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.schemas import userSchema, competitionSchema
 from app.core.auth import verify_token
-from app.service import competitionService
+from app.service import competitionService, submissionService
 
 
 from app.dependencies.dependencies import get_db
@@ -17,5 +17,10 @@ async def create_competition(competition: competitionSchema.CompetitionCreate, d
     return await competitionService.create_competition(db=db, competition=competition, user_id=int(payload.get("user_id")))
 
 
-
+@router.get("/competitions/{id}/submissions", response_model=list[competitionSchema.CompetitionRead], status_code=status.HTTP_200_OK)
+async def get_submissions(id: int, db: AsyncSession = Depends(get_db), payload: dict = Depends(verify_token)):
+    if payload.get("role") != "admin":
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="You are not authorized to perform this action!")
+    
+    return await submissionService.get_submissions_for_competition(db, id)
 

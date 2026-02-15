@@ -23,9 +23,9 @@ async def get_user_submissions(db, user_id: int):
     return db_submissions
 
 
-async def get_submission_for_competition(db, competition_id):
+async def get_submissions_for_competition(db, competition_id):
     db_submissions = await submissionRepository.get_by_competitionId(db, competition_id)
-    if not db_submissions:
+    if db_submissions.all() == []:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No submissions found yet!")
 
     return db_submissions
