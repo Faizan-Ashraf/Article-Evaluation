@@ -16,7 +16,7 @@ class Submission(Base):
     content = Column(Text, index=True, nullable=False)
     submitted_at = Column(DateTime(timezone=True), server_default=func.now())
     competitor_id = Column(Integer, ForeignKey("users.id"), nullable=False)
-    competitition_id = Column(Integer, ForeignKey("competitions.id"), nullable=False)
+    competition_id = Column(Integer, ForeignKey("competitions.id"), nullable=False)
     feedback = Column(Text)
     score = Column(Integer)
     evaluated_at = Column(DateTime(timezone=True))

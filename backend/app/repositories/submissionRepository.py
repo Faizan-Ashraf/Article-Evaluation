@@ -20,22 +20,22 @@ async def get_by_id(db: AsyncSession, submission_id):
 
 async def get_submission_by_userId(db: AsyncSession, user_id):
     result = await db.execute(select(Submission).where(Submission.competitor_id==user_id))
-    return result.scalars()
+    return result.scalars().all()
 
 async def get_by_competitionId(db: AsyncSession, competition_id):
-    result = await db.execute(select(Submission).where(Submission.competitor_id==competition_id))
-    return result.scalars()
+    result = await db.execute(select(Submission).where(Submission.competition_id==competition_id))
+    return result.scalars().all()
 
 async def get_by_userId_competitionId(db:AsyncSession, user_id:int, competition_id:int):
-    result = await db.execute(select(Submission).filters(Submission.competitor_id==user_id, Submission.competitition_id==competition_id))
+    result = await db.execute(select(Submission).where(Submission.competitor_id==user_id, Submission.competition_id==competition_id))
     return result.scalar_one_or_none()
 
 async def update_submission(db: AsyncSession, score: int, feedback: str, submission_id):
     sub = await get_by_id(db, submission_id)
     if sub:
-        sub.sub.score = score
+        sub.score = score
         sub.feedback = feedback
-        sub.status = "evaluated"
+        sub.status = "EVALUATED"
         sub.evaluated_at = func.now()
         await db.commit()
         await db.refresh(sub)

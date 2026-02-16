@@ -19,11 +19,11 @@ async def create(db: AsyncSession, meta_data: dict):
 
 async def get_competitions(db: AsyncSession, skip: int = 0, limit: int = 10):
     result = await db.execute(select(Competition).offset(skip).limit(limit))
-    return result.scalars()
+    return result.scalars().all()
 
 async def get_active_competitions(db: AsyncSession):
     result = await db.execute(select(Competition).where(Competition.is_active==True))
-    return result.scalars()
+    return result.scalars().all()
 
 async def get_by_id(db: AsyncSession, competition_id: int):
     result = await db.execute(select(Competition).where(Competition.id==competition_id))

@@ -16,14 +16,12 @@ class CompetitionBase(BaseModel):
 
 # class CompetitionUpdateStatus(BaseModel):
 #     status: StatusEnum
+class CompetitionCreate(CompetitionBase):
+    pass   
 
 class CompetitionRead(CompetitionBase):
     id: int
     created_at: datetime
     created_by: int
-
     class Config:
         from_attributes = True
-
-class CompetitionCreate(CompetitionBase):
-    pass   
