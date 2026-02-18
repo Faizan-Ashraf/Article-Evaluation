@@ -6,7 +6,7 @@ import { useRouter } from "next/router";
 interface authContextType{
     user :User | null
     loading: boolean;
-    login: (username: string, password: string)=>Promise<void>
+    login: (email: string, password: string)=>Promise<void>
     logout: ()=> void
     register: (data: any) => Promise<void>;
     token: string| null;
@@ -23,7 +23,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     useEffect(
         ()=>{
-            const storedToken = localStorage.get('token')
+            const storedToken = localStorage.getItem('token')
             if(storedToken){
                 setToken(storedToken)
                 
@@ -37,8 +37,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             setLoading(false);
         },[]
     )    
-    const login = async (username: string, password: string)=>{
-        const response = await authService.login({username, password});
+    const login = async (email: string, password: string)=>{
+        const response = await authService.login({email, password});
         const access_token = response.token;
         localStorage.setItem('token', access_token);
         setToken(access_token);

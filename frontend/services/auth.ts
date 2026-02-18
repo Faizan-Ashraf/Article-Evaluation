@@ -10,7 +10,7 @@ export const authService = {
     },
     async login(credentials: loginCredentials): Promise<AuthResponse> {
         const formData = new FormData();
-        formData.append('username', credentials.username);
+        formData.append('email', credentials.email);
         formData.append('password', credentials.password);
 
         const response = await api.post('/auth/login',formData, {
