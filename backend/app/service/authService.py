@@ -26,5 +26,5 @@ async def login_user(user: userSchema.UserLogin, db):
         log.warning("Invalid password!")
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid password!")
 
-    token = auth.create_token(data={"sub": db_user.email, "role": db_user.role.value, "user_id": db_user.id})
+    token = auth.create_token(data={"sub": db_user.email, "role": db_user.role.value, "user_id": db_user.id, "username": db_user.username})
     return {"access_token": token, "token_type": "bearer"}
