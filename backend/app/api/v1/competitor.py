@@ -14,13 +14,13 @@ async def get_competitions(db: AsyncSession = Depends(get_db), payload: dict = D
 
 @router.post("/submit-article", response_model=submissionSchema.SubmissionRead, status_code=status.HTTP_201_CREATED)
 async def submit_article(article: submissionSchema.SubmissionCreate,db: AsyncSession = Depends(get_db), payload: dict = Depends(verify_token)):
-    if payload.get("role") !="competitor":
+    if payload.get("role") !="COMPETITOR":
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="You are not authorized to perform this action!")
     return await submissionService.submit_article(db, article, user_id=int(payload.get("user_id")))
 
 
 @router.get("/my-results", response_model=list[submissionSchema.SubmissionRead], status_code=status.HTTP_200_OK)
 async def get_results(db: AsyncSession = Depends(get_db), payload: dict = Depends(verify_token)):
-    if payload.get("role") !="competitor":
+    if payload.get("role") !="COMPETITOR":
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="You are not authorized to perform this action!")
     return await submissionService.get_user_submissions(db, user_id=int(payload.get("user_id")))

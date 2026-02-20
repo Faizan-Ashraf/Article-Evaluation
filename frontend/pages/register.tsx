@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router";
-import { useAppDispatch } from "@/store/hooks";
 import Link from "next/link";
 import { useRegisterMutation } from "@/store/apiSlice";
 

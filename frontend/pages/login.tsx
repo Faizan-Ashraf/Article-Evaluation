@@ -27,7 +27,7 @@ export default function LoginPage() {
             dispatch(setCredentials({user, token: response.access_token}))
             router.push('/')
         } catch (err: any) {
-            setError(err.data?.detail || err.message || 'Login failed');
+            setError(err.response?.data?.detail || err.message || 'Login failed');
         }
     };
 
