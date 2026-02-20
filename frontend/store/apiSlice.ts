@@ -1,10 +1,12 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { RootState } from "./store";
 
+import { RegisterData, loginCredentials, AuthResponse, Competition, Submission, User } from "@/types";
+
 export const apiSlice = createApi({
     reducerPath: "api",
     baseQuery: fetchBaseQuery({
-        baseUrl: process.env.API_URL,
+        baseUrl: process.env.NEXT_PUBLIC_API_URL,
         prepareHeaders: (headers, { getState }) => {
             const token = (getState() as RootState).auth.token;
             if (token) {
@@ -14,5 +16,28 @@ export const apiSlice = createApi({
         },
     }),
     tagTypes: ['User', 'Competition', 'Submission'],
-    endpoints: (builder) => ({}),
+    endpoints: (builder) => ({
+        register: builder.mutation<any, RegisterData>({ //register
+            query: (data) => ({
+                url: '/auth/register',
+                method: 'POST',
+                body: data
+            })
+        }),
+
+        login: builder.mutation<AuthResponse, loginCredentials>({ //login
+            query: (credentials) => ({
+                url: '/auth/login',
+                method: 'POST',
+                body: {
+                    email: credentials.email,
+                    password: credentials.password,
+                },
+                headers: { 'Content-Type': 'application/json' },
+            })
+        })
+    }),
 })
+
+
+export const {useRegisterMutation, useLoginMutation} = apiSlice

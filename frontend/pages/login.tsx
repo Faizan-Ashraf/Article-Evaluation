@@ -1,22 +1,33 @@
 import { useState } from "react";
-import { useAuth } from "../contexts/AuthContext";
 import { useRouter } from "next/router";
-
+import { useAppDispatch } from "@/store/hooks";
 import Link from "next/link";
+import { setCredentials } from "@/store/authSlice";
+import { useLoginMutation } from "@/store/apiSlice";
 
 export default function LoginPage() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const { login } = useAuth();
     const [error, setError] = useState('');
     const router = useRouter();
+    const [login, {isLoading}] = useLoginMutation();
+    const dispatch = useAppDispatch()
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            await login(email, password);
+            const response = await login({email, password}).unwrap()
+            const payload = JSON.parse(atob(response.access_token.split('.')[1]))
+            const user = {
+                id: payload.user_id || payload.id,
+                username: payload.username,
+                email: payload.sub,
+                role: payload.role
+            };
+            dispatch(setCredentials({user, token: response.access_token}))
+            router.push('/')
         } catch (err: any) {
-            setError(err.response?.data?.detail || 'Login failed');
+            setError(err.data?.detail || err.message || 'Login failed');
         }
     };
 

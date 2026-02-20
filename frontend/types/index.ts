@@ -29,7 +29,7 @@ export interface Submission {
 }
 
 export interface AuthResponse {
-    token: string;
+    access_token: string;
     token_type: string;
 }
 
