@@ -15,7 +15,7 @@ export const apiSlice = createApi({
             return headers;
         },
     }),
-    tagTypes: ['User', 'Competition', 'Submission'],
+    tagTypes: ['User', 'Competitions', 'Submissions'],
     endpoints: (builder) => ({
         register: builder.mutation<any, RegisterData>({ //register
             query: (data) => ({
@@ -35,9 +35,18 @@ export const apiSlice = createApi({
                 },
                 headers: { 'Content-Type': 'application/json' },
             })
-        })
+        }),
+
+        createCompetition: builder.mutation <Competition, Partial<Competition>>({
+            query: (data)=> ({
+                url: '/admin/competition',
+                method: 'POST',
+                body: data,
+            }),
+            invalidatesTags: ['Competitions']
+        }),
     }),
 })
 
 
-export const {useRegisterMutation, useLoginMutation} = apiSlice
+export const { useRegisterMutation, useLoginMutation, useCreateCompetitionMutation } = apiSlice

@@ -1,7 +1,6 @@
 import { useRouter } from "next/router";
-import { use, useEffect } from "react";
-import { useAuth } from "../contexts/AuthContext";
-
+import { useEffect } from "react";
+import { useAppSelector } from "@/store/hooks";
 
 interface ProtectedRouteProps {
     children: React.ReactNode;
@@ -10,28 +9,25 @@ interface ProtectedRouteProps {
 }
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, allowRoles }) => {
-    const { user, loading } = useAuth();
+    const { user, token } = useAppSelector((state)=> state.auth);
     const router = useRouter();
 
     useEffect(() => {
-        if (!loading){
-            if (!user){
-                router.push('/login') //not logged in
-            }
-            else if (allowRoles && !allowRoles.includes(user.role)){
-                router.push('/') //logged in but not authorized;
-            }
-
+        if (!token){
+            router.push('/login')
         }
-    }, [user, loading, router, allowRoles]);
+        else if(user && allowRoles && !allowRoles.includes(user.role)){
+            router.push('/')
+        }
+    }, [user, token, router, allowRoles]);
 
-    if (loading || !user) {
+    if (!token) {
         return <div>Loading...</div>;
     }
 
-    if (allowRoles && !allowRoles.includes(user.role)) {
-        return null;
-    }
+    if (allowRoles && user && !allowRoles.includes(user.role)) {
+        return null
+    };
 
     return <>{children}</>;
 }
