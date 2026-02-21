@@ -86,13 +86,15 @@ Article Evaluation is an application for managing article writing competitions, 
 ### Admin
 - `POST /admin/competition` - Create competition
 - `GET /admin/competitions/{id}/submissions` - Get Submissions
-- `POST /admin/evaluate/{id}/competition` - ai evaluate complete competition
+- `GET /admin/evaluate/{id}/competition` - ai evaluate complete competition
 
 ### Competitor
 - `GET /competitor/competitions` - get active competitions
 - `POST /competitor/submit-article` Submit article
 - `GET /competitor/my-results` get results of all submissions
 
+### Home
+- `GET /home//all-competitions` - get all competitions for home page for both admin and competitor
 
 ---
 

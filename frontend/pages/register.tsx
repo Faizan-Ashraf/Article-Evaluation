@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { useRegisterMutation } from "@/store/apiSlice";
+import styles from '../styles/Auth.module.css'
 
 export default function Register() {
     const [username, setUsername] = useState('')
@@ -25,39 +26,41 @@ export default function Register() {
 
 
     return (
-        <div>
-            <h1>Sign Up</h1>
-            <form onSubmit={handleSubmit}>
-                <div>
+        <div className={styles.container}>
+            <div className={styles.card}>
+                <h1>Sign Up</h1>
+                <form onSubmit={handleSubmit}>
+                    <div className={styles.formGroup}>
 
-                    <label>Username: </label>
-                    <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} required />
+                        <label>Username: </label>
+                        <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} required />
 
-                </div>
-                <div>
-                    <label>Email:</label>
-                    <input
-                        type="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        required
-                    />
-                </div>
-                <div>
-                    <label>Password:</label>
-                    <input
-                        type="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
-                    />
-                </div>
-                {error && <p style={{ color: 'red' }}>{error}</p>}
-                <button type="submit" disabled={isLoading}>{isLoading ? 'Registering...' : 'Register'}</button>
+                    </div>
+                    <div className={styles.formGroup}>
+                        <label>Email:</label>
+                        <input
+                            type="email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            required
+                        />
+                    </div>
+                    <div className={styles.formGroup}>
+                        <label>Password:</label>
+                        <input
+                            type="password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            required
+                        />
+                    </div>
+                    {error && <p className={styles.errorText}>{error}</p>}
+                    <button type="submit" disabled={isLoading} className={styles.loginBtn}>{isLoading ? 'Registering...' : 'Register'}</button>
 
 
-            </form>
-            Already have an account? <Link href="/login">Login</Link>
+                </form>
+                <p className={styles.registerText}>Already have an account? <Link href="/login">Login</Link></p>
+            </div>
         </div>
     )
 

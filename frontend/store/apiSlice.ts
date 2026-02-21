@@ -17,6 +17,16 @@ export const apiSlice = createApi({
     }),
     tagTypes: ['User', 'Competitions', 'Submissions'],
     endpoints: (builder) => ({
+
+        getCompetitions: builder.query<Competition[], void>({
+            query: () => `/home/all-competitions`,
+
+            providesTags: (result, error) => result ? [{ type: 'Competitions' }] : []
+        }),
+
+
+
+
         register: builder.mutation<any, RegisterData>({ //register
             query: (data) => ({
                 url: '/auth/register',
@@ -37,16 +47,33 @@ export const apiSlice = createApi({
             })
         }),
 
-        createCompetition: builder.mutation <Competition, Partial<Competition>>({
-            query: (data)=> ({
+        createCompetition: builder.mutation<Competition, Partial<Competition>>({
+            query: (data) => ({
                 url: '/admin/competition',
                 method: 'POST',
                 body: data,
             }),
             invalidatesTags: ['Competitions']
         }),
+
+
+        getSubmissions: builder.query<Submission[], number>({
+            query: (competitionId) => `/admin/competitions/${competitionId}/submissions`,
+
+            providesTags: (result, error, id) => result ? [{ type: 'Submissions', id }] : []
+        }),
+
+        evaluateCompetition: builder.mutation<Submission[], number>({
+            query: (competitionId) => ({
+                url: `/admin/evaluate/${competitionId}/competition`,
+                method: 'GET'
+            }),
+            invalidatesTags: (result, error, id) => result ? [{ type: 'Submissions', id }] : []
+        })
+
+
     }),
 })
 
 
-export const { useRegisterMutation, useLoginMutation, useCreateCompetitionMutation } = apiSlice
+export const { useRegisterMutation, useLoginMutation, useCreateCompetitionMutation, useGetSubmissionsQuery, useEvaluateCompetitionMutation, useGetCompetitionsQuery } = apiSlice
