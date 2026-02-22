@@ -19,15 +19,13 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                     <Link href={'/'} className={styles.navLink}>Home</Link>
                     {user?.role === 'ADMIN' && (
                         <>
-                            <Link href={'/admin/create-competition'} className={styles.navLink}>Create Competition</Link>
-                            <Link href={'/admin/competitions/2/submissions'} className={styles.navLink}>Create Competition</Link>
-                            {/* <Link href={'/admin/create-competition'}>Create Competition</Link> */}
+                            <Link href={'/admin/create-competition'} className={styles.navLink}>Create</Link>
 
                         </>
                     )}
                     {user?.role === 'COMPETITOR' && (
                         <>
-                            {/* TO DO */}
+                            <Link href={'/competitor/results'} className={styles.navLink}>Results</Link>
                         </>
                     )}
                 </div>

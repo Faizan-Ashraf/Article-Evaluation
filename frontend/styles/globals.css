@@ -1,24 +1,15 @@
-:root {
-  --background: #ffffff;
-  --foreground: #828282;
-}
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #828282;
-    --foreground: #ededed;
-  }
-}
+
 
 html,
 body {
   max-width: 100vw;
   overflow-x: hidden;
+
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
+  background-color: #bdbdbd;
   font-family: Arial, Helvetica, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -35,4 +26,96 @@ a {
   text-decoration: none;
 }
 
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #ffffff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    color: #111827;
+}
 
+.table th,
+.table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.table th {
+    background-color: #f3f4f6;
+    color: #111827;
+    font-weight: 600;
+}
+
+
+.table tbody tr:hover {
+    background-color: #f9fafb;
+    cursor: pointer;
+}
+
+
+.loader{
+  text-align: center;
+  color: gray;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form label {
+  font-weight: 500;
+  margin-bottom: 5px;
+  display: block;
+  color: #374151;
+}
+
+.form p {
+  color: #dc2626;
+  font-size: 14px;
+  margin-top: -10px;
+}
+
+.form input,
+.form textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  outline: none;
+  font-size: 14px;
+}
+
+.container{
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 30px 40px;
+    background-color: #ffffff;
+    border-radius: 12px;
+}
+.container h1{
+    text-align: center;
+    margin-bottom: 25px;
+    color: #111827;
+}
+
+
+.btn {
+  padding: 12px;
+  background-color: #4f46e5;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 16px;
+  transition: 0.3s;
+}
+
+.btn:hover{
+    background-color: #372ed9;
+}

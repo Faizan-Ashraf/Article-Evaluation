@@ -11,16 +11,16 @@ export interface Competition {
     id: number;
     title: string;
     description: string;
-    evaluationCriteria: string;
-    createdBy: number;
-    createdAt: string;
+    evaluation_criteria: string;
+    created_by: number;
+    created_at: string;
     is_active: boolean;
 }
 
 export interface Submission {
     id: number;
     content: string;
-    competitionId: number;
+    competition_id: number;
     submitted_at: string;
     feedback: string;
     score: number;

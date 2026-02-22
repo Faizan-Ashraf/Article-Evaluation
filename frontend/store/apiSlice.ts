@@ -18,8 +18,8 @@ export const apiSlice = createApi({
     tagTypes: ['User', 'Competitions', 'Submissions'],
     endpoints: (builder) => ({
 
-        getCompetitions: builder.query<Competition[], void>({
-            query: () => `/home/all-competitions`,
+        getCompetitions: builder.query<Competition[], void>({ //get all competitions
+            query: () => `/competition/all-competitions`,
 
             providesTags: (result, error) => result ? [{ type: 'Competitions' }] : []
         }),
@@ -56,6 +56,14 @@ export const apiSlice = createApi({
             invalidatesTags: ['Competitions']
         }),
 
+        getCompetition: builder.query<Competition, number>({ //get a competition by id
+            query: (id) => ({
+                url: `/competition/${id}`,
+                method: 'GET',
+            }),
+            providesTags: (result, error, id) => result ? [{ type: 'Competitions', id } ]: []
+        }),
+
 
         getSubmissions: builder.query<Submission[], number>({
             query: (competitionId) => `/admin/competitions/${competitionId}/submissions`,
@@ -69,6 +77,23 @@ export const apiSlice = createApi({
                 method: 'GET'
             }),
             invalidatesTags: (result, error, id) => result ? [{ type: 'Submissions', id }] : []
+        }),
+
+
+        // Competitor
+
+        submitArticle: builder.mutation<any, Partial<Submission>>({
+            query: (data) =>({
+                url: `/competitor/submit-article`,
+                method: 'POST',
+                body: data,
+            }),
+            invalidatesTags: ['Submissions'],
+        }),
+
+        getResults: builder.query<Submission[], void>({
+            query: ()=>'/competitor/my-results',
+            providesTags: ['Submissions'],
         })
 
 
@@ -76,4 +101,6 @@ export const apiSlice = createApi({
 })
 
 
-export const { useRegisterMutation, useLoginMutation, useCreateCompetitionMutation, useGetSubmissionsQuery, useEvaluateCompetitionMutation, useGetCompetitionsQuery } = apiSlice
+export const { useRegisterMutation, useLoginMutation,
+     useCreateCompetitionMutation, useGetSubmissionsQuery,
+      useEvaluateCompetitionMutation, useGetCompetitionsQuery, useGetCompetitionQuery, useSubmitArticleMutation, useGetResultsQuery } = apiSlice

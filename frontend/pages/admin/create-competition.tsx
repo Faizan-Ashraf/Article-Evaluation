@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 import { useCreateCompetitionMutation } from "@/store/apiSlice";
 import ProtectedRoute from "@/components/protedtedRoutes";
+import styles from "@/styles/CreateCompetition.module.css"
 
 
 
@@ -18,7 +18,7 @@ export default function CreateCompetition(){
     const handleSubmit = async (e: React.FormEvent) =>{
         e.preventDefault()
         try {
-            await createCompetition({title, description, evaluationCriteria}).unwrap();
+            await createCompetition({ title, description, evaluation_criteria: evaluationCriteria }).unwrap();
             router.push('/')
         } catch (err: any) {
             setError(err.response?.data?.detail || err.message || 'Failed to create competition');
@@ -28,9 +28,9 @@ export default function CreateCompetition(){
 
     return (
         <ProtectedRoute allowRoles={['ADMIN']}>
-            <div>
+            <div className="container">
                 <h1>Create Competition</h1>
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit} className="form">
                     <div>
                         <label>Title: </label>
                         <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} required/>
@@ -46,7 +46,7 @@ export default function CreateCompetition(){
                         <textarea cols={3} rows={4} value={evaluationCriteria} onChange={(e) => setEvaluationCriteria(e.target.value)}></textarea>
                     </div>
                     {error && <p style={{ color: 'red' }}>{error}</p>}
-                    <button type="submit">{isLoading? 'Creating Competition...' : 'Create Competition'}</button>
+                    <button type="submit" className="btn">{isLoading? 'Creating Competition...' : 'Create Competition'}</button>
 
                 </form>
             </div>

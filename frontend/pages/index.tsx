@@ -6,10 +6,15 @@ import { useAppSelector } from "@/store/hooks";
 import styles from "@/styles/Home.module.css"
 
 
+
 export default function Home() {
     const router = useRouter()
     const { data: competitions, isLoading, refetch } = useGetCompetitionsQuery()
     const { user, token } = useAppSelector((state) => state.auth)
+
+    if(isLoading){
+        <div className={styles.loader}>Loading...</div>
+    }
 
 
 
@@ -19,7 +24,7 @@ export default function Home() {
             <div className={styles.grid}>
 
                 {competitions?.map((sub) => (
-                    <Link href={user?.role==="ADMIN"?`/admin/competitions/${Number(sub.id)}/submissions`: `/`}>
+                    <Link href={user?.role==="ADMIN"?`/admin/competitions/${Number(sub.id)}/submissions`: `/competitor/submit/${Number(sub.id)}`}>
                         <div key={sub.id} className={styles.card}>
                             <h1 className={styles.cardTitle}>Title: {sub.title}</h1>
                             <p className={styles.cardDescription}>Description: {sub.description.substring(0, 150)}...</p>

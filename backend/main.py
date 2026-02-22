@@ -1,8 +1,8 @@
 from fastapi import FastAPI
-from app.api.v1 import admin, auth, competitor
+from app.api.v1 import admin, auth, competitor, competitions
 from fastapi.middleware.cors import CORSMiddleware
 
-from backend.app.api.v1 import competitions
+
 
 
 app = FastAPI()
