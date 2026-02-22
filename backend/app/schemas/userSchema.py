@@ -10,8 +10,8 @@ class UserBase(BaseModel):
 
 
 class UserCreate(UserBase):
-    password: str = Field(min_length=8)
-    role: Optional[str] = "competitor"
+    password: str
+    role: Optional[str] = "COMPETITOR"
 
 class UserLogin(BaseModel):
     email: EmailStr

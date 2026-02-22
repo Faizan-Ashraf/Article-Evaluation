@@ -4,8 +4,8 @@ from enum import Enum
 
 
 class Role(Enum):
-    ADMIN = "admin"
-    COMPETITOR = "competitor"
+    ADMIN = "ADMIN"
+    COMPETITOR = "COMPETITOR"
 
 
 class User(Base):
