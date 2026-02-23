@@ -4,12 +4,12 @@ import ProtectedRoute from "@/components/protedtedRoutes";
 import styles from '@/styles/Results.module.css'
 
 
-export default function GetResults(){
+export default function GetResults() {
     const { data: submissions, isLoading } = useGetResultsQuery();
     const { data: competitions } = useGetCompetitionsQuery();
 
     if (isLoading) {
-        return <div className={styles.loader}>Loading...</div>;
+        return <div className="loader">Loading...</div>;
     }
 
     const getCompetitionTitle = (competitionId: number) =>
@@ -19,28 +19,33 @@ export default function GetResults(){
         <ProtectedRoute allowRoles={['COMPETITOR']}>
             <div className={styles.container}>
                 <h1>My Results</h1>
-                <table className="table">
-                    <thead>
-                        <tr>
-                            <th>Competition</th>
-                            <th>Submitted At</th>
-                            <th>Score</th>
-                            <th>Feedback</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {submissions?.map((sub) => (
-                            <tr key={sub.id}>
-                                <td>{getCompetitionTitle(sub.competition_id)}</td>
-                                <td>{new Date(sub.submitted_at).toLocaleString()}</td>
-                                <td>{sub.score}</td>
-                                <td>{sub.feedback}</td>
-                                <td>{sub.status}</td>
+                <div className="tableContainer">
+
+                    <table className="table">
+                        <thead>
+                            <tr>
+                                <th>Competition</th>
+                                <th>Submitted At</th>
+                                <th>Score</th>
+                                <th>Feedback</th>
+                                <th>Status</th>
+                                <th>Rank</th>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            {submissions?.map((sub) => (
+                                <tr key={sub.id}>
+                                    <td>{getCompetitionTitle(sub.competition_id)}</td>
+                                    <td>{new Date(sub.submitted_at).toLocaleString()}</td>
+                                    <td>{sub.score}</td>
+                                    <td>{sub.feedback}</td>
+                                    <td>{sub.status}</td>
+                                    <td>{sub.rank}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </ProtectedRoute>
     );

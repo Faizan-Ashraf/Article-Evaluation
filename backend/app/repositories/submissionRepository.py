@@ -41,4 +41,15 @@ async def update_submission(db: AsyncSession, score: int, feedback: str, submiss
         await db.refresh(sub)
     return sub
 
+async def rank(submissions, db: AsyncSession):
+
+    current_rank = 0
+    last_score = None
+    for sub in submissions:
+        if sub.score != last_score:
+            current_rank += 1
+            last_score = sub.score
+        sub.rank = current_rank
+    await db.commit()
+
 

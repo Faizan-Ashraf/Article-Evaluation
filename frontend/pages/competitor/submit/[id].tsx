@@ -21,19 +21,15 @@ export default function Submit() {
         if (!id) { return }
 
         try {
-
-            await submitArticle({ competition_id, content });
-            alert("Article Submitted Successfully");
-
-            router.push('/');
-
+            await submitArticle({ competition_id, content }).unwrap();
+            // router.push('/');
         } catch (err: any) {
-            alert(err?.data?.detail || 'Failed to Submit Article')
+            setError(err?.data?.detail || err?.message || 'Failed to Submit Article');
         }
     }
 
     if(isLoading){
-            <div className={styles.loader}>Loading...</div>
+            <div className="loader">Loading...</div>
     }
 
     return (
@@ -52,7 +48,7 @@ export default function Submit() {
                             rows={10}
                         />
                     </div>
-                    
+                    {error && <p className="errorText">{error}</p>}
                     <button type="submit" disabled={isLoading} className="btn">
                         {isLoading ? 'Submitting...' : 'Submit'}
                     </button>

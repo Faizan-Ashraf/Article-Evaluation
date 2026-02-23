@@ -21,7 +21,7 @@ export default function CreateCompetition(){
             await createCompetition({ title, description, evaluation_criteria: evaluationCriteria }).unwrap();
             router.push('/')
         } catch (err: any) {
-            setError(err.response?.data?.detail || err.message || 'Failed to create competition');
+            setError(err?.data?.detail || err.message || 'Failed to create competition');
         }
     }
 
@@ -45,7 +45,7 @@ export default function CreateCompetition(){
                         <label>Criteria: </label>
                         <textarea cols={3} rows={4} value={evaluationCriteria} onChange={(e) => setEvaluationCriteria(e.target.value)}></textarea>
                     </div>
-                    {error && <p style={{ color: 'red' }}>{error}</p>}
+                    {error && <p className="errorText">{error}</p>}
                     <button type="submit" className="btn">{isLoading? 'Creating Competition...' : 'Create Competition'}</button>
 
                 </form>

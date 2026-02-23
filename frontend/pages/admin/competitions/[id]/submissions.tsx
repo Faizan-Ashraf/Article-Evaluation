@@ -17,10 +17,10 @@ export default function Submissions() {
 
     const handleEvaluate = async () => {
         try {
-            await evaluate(competitionId);
+            await evaluate(competitionId).unwrap();
             refetch(); //submission refetch after evaluation
         } catch (err: any) {
-            setError(err.response?.data?.detail || err.message || 'Evaluation failed')
+            setError(err?.data?.detail || err?.message || 'Evaluation failed');
         }
     }
 
@@ -30,14 +30,15 @@ export default function Submissions() {
 
     return (
         <ProtectedRoute allowRoles={['ADMIN']}>
+            {error && <p className="errorText">{error}</p>}
             <div className={styles.container}>
 
 
                 <h1 className={styles.title}>{competition?.title} Submissions</h1>
                 <div className={styles.competitionInfo}>
-                    <div style={{color: "#111827"}}>
+                    <div style={{ color: "#111827" }}>
                         Created At:
-                        {new Date(competition?.created_at ? competition.created_at: "N/A").toLocaleString()}
+                        {new Date(competition?.created_at ? competition.created_at : "N/A").toLocaleString()}
                     </div>
                     <div >
                         <span className={competition?.is_active ? styles.activeStatus : styles.inactiveStatus}>
@@ -49,29 +50,32 @@ export default function Submissions() {
                     </div>
                 </div>
                 <button onClick={handleEvaluate} disabled={evaluLoading} className={styles.evaluateBtn}>{evaluLoading ? 'Evaluating...' : 'Run AI Evaluation'}</button>
+                <div className="tableContainer">
 
-                <table className="table">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Content</th>
-                            <th>Submitted At</th>
-                            <th>Score</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {submissions?.map((sub) => (
-                            <tr key={sub.id}>
-                                <td>{sub.id}</td>
-                                <td>{sub.content.substring(0, 50)}...</td>
-                                <td>{new Date(sub.submitted_at).toLocaleString()}</td>
-                                <td>{sub.score}</td>
-                                <td className={sub.status === "EVALUATED" ? styles.activeStatus : styles.inactiveStatus}>{sub.status}</td>
+                    <table className="table">
+                        <thead>
+                            <tr>
+                                <th>Content</th>
+                                <th>Submitted At</th>
+                                <th>Score</th>
+                                <th>Status</th>
+                                <th>Status</th>
+                                <th>Rank</th>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            {submissions?.map((sub) => (
+                                <tr key={sub.id}>
+                                    <td title={sub.content}>{sub.content.substring(0, 50)}...</td>
+                                    <td>{new Date(sub.submitted_at).toLocaleString()}</td>
+                                    <td>{sub.score}</td>
+                                    <td className={sub.status === "EVALUATED" ? styles.activeStatus : styles.inactiveStatus}>{sub.status}</td>
+                                    <td>{sub.rank}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </ProtectedRoute>
     )

@@ -47,27 +47,40 @@ def ai_evaluation(submission: submissionSchema.SubmissionRead, competition: comp
             result = response.choices[0].message.content
             return json.loads(result)
         except Exception as e:
-            print(f"Error evaluating submission {submission.id}: {e}")
-            
+            raise HTTPException(
+                        status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+                        detail=f"Evaluation failed {e}")
 
 
-async def evaluate_submissions(db, competition_id:int):
-        
-        competition = await competitionRepository.get_by_id(db, competition_id)
-        if not competition:
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Competition not found!")
-        
+def rank(submissions: submissionSchema.SubmissionRead):
+    curr_rank = 0
+    last_score = 0
+    for sub in submissions:
+        if sub.score != last_score:
+            curr_rank +=1
+            last_score = sub.score
+        sub.rank = curr_rank
 
-        submissions = await submissionRepository.get_by_competitionId(db, competition_id)
-        if not submissions:
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No submissions found for this competition!")
-        
-        
-        for submission in submissions:
-            if submission.status.value == "pending":
-                evaluation_result = ai_evaluation(submission, competition)
-                await submissionRepository.update_submission(db, evaluation_result["score"], evaluation_result["feedback"], submission.id)
-            
+    return submissions
 
-        return submissions
+
+async def evaluate_submissions(db, competition_id: int):
+    competition = await competitionRepository.get_by_id(db, competition_id)
+    if not competition:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Competition not found!")
+
+    submissions = await submissionRepository.get_by_competitionId(db, competition_id)
+    if not submissions:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No submissions found for this competition!")
+
+
+    for submission in submissions:
+        if submission.status.value == "pending":
+            evaluation_result = ai_evaluation(submission, competition)
+            await submissionRepository.update_submission(
+                db, evaluation_result["score"], evaluation_result["feedback"], submission.id
+            )
+
+
+    await submissionRepository.rank(submissions=submissions, db=db)
         

@@ -26,6 +26,7 @@ export interface Submission {
     score: number;
     evaluated_at: string;
     status: 'PENDING' | 'EVALUATED';
+    rank: number
 }
 
 export interface AuthResponse {

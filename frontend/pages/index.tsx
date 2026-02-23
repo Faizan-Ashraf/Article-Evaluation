@@ -1,5 +1,4 @@
 import { useGetCompetitionsQuery } from "@/store/apiSlice";
-import { subscribe } from "diagnostics_channel";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { useAppSelector } from "@/store/hooks";
@@ -13,7 +12,7 @@ export default function Home() {
     const { user, token } = useAppSelector((state) => state.auth)
 
     if(isLoading){
-        <div className={styles.loader}>Loading...</div>
+        <div className="loader">Loading...</div>
     }
 
 
