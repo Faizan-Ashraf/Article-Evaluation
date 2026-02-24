@@ -13,7 +13,8 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, allowRoles })
     const router = useRouter();
 
     useEffect(() => {
-        if (!token){
+        const local_token = localStorage.getItem('token')
+        if (!local_token){
             router.push('/login')
         }
         else if(user && allowRoles && !allowRoles.includes(user.role)){

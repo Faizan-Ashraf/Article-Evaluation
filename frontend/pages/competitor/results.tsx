@@ -6,14 +6,21 @@ import styles from '@/styles/Results.module.css'
 
 export default function GetResults() {
     const { data: submissions, isLoading } = useGetResultsQuery();
-    const { data: competitions } = useGetCompetitionsQuery();
-
-    if (isLoading) {
-        return <div className="loader">Loading...</div>;
-    }
+    const { data: competitions, isLoading: compLoader } = useGetCompetitionsQuery();
 
     const getCompetitionTitle = (competitionId: number) =>
         competitions?.find((c) => c.id === competitionId)?.title ?? "—";
+
+
+    if (isLoading || compLoader) {
+        return <div className="loader">
+            <h1>
+                Loading...
+            </h1>
+
+        </div>;
+    }
+
 
     return (
         <ProtectedRoute allowRoles={['COMPETITOR']}>

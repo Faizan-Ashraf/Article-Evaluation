@@ -26,6 +26,10 @@ export default function LoginPage() {
                 role: payload.role
             };
             dispatch(setCredentials({ user, token: response.access_token }))
+
+            localStorage.setItem('token', response.access_token);
+            localStorage.setItem('user', JSON.stringify(user));
+            
             router.push('/')
         } catch (err: any) {
             setError(err.data?.detail || err.message || 'Login failed');

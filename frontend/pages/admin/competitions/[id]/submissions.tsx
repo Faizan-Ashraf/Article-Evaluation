@@ -24,8 +24,13 @@ export default function Submissions() {
         }
     }
 
-    if (isLoading) {
-        <div>Loading Submissions...</div>
+    if (isLoading || compLoading || evaluLoading) {
+        return (<div className="loader">
+            <h1>
+                Loading Submissions...
+
+            </h1>
+        </div>)
     }
 
     return (

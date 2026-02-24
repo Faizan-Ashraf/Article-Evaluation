@@ -4,6 +4,7 @@ import ProtectedRoute from "@/components/protedtedRoutes";
 import React, { useState } from "react";
 import { useSubmitArticleMutation, useGetCompetitionQuery } from "@/store/apiSlice";
 import styles from '@/styles/SubmitArticle.module.css'
+import toast from "react-hot-toast";
 
 
 export default function Submit() {
@@ -22,22 +23,25 @@ export default function Submit() {
 
         try {
             await submitArticle({ competition_id, content }).unwrap();
-            // router.push('/');
+            toast.success("Article Submitted Successfully!")
+            router.push('/');
         } catch (err: any) {
             setError(err?.data?.detail || err?.message || 'Failed to Submit Article');
         }
     }
 
-    if(isLoading){
-            <div className="loader">Loading...</div>
+    if (isLoading || compLoading) {
+        return (<div className="loader">
+            <h1>Loading...</h1>
+        </div>)
     }
 
     return (
         <ProtectedRoute allowRoles={['COMPETITOR']}>
             <div className="container">
                 <h1>Submit Article for Competition {competition?.title}</h1>
-                <p className={styles.p}><strong>Description:</strong> {competition?.description ? competition.description: 'N/A'}</p>
-                <p className={styles.p}><strong>Evaluation Criteria:</strong> {competition?.description ? competition.evaluation_criteria: 'N/A'}</p>
+                <p className={styles.p}><strong>Description:</strong> {competition?.description ? competition.description : 'N/A'}</p>
+                <p className={styles.p}><strong>Evaluation Criteria:</strong> {competition?.description ? competition.evaluation_criteria : 'N/A'}</p>
                 <form onSubmit={handleSubmit} className="form">
                     <div>
                         <label>Your Article</label>
