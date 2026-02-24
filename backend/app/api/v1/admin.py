@@ -35,5 +35,11 @@ async def evaluate_submissions(id: int, db: AsyncSession = Depends(get_db), payl
     return await evaluationService.evaluate_submissions(db, id)
 
 
+@router.put("/manual_evaluate/{submission_id}", status_code=status.HTTP_200_OK)
+async def manual_evaluation(submission_id: int, feedback: submissionSchema.CompetitionFeedback, db:AsyncSession = Depends(get_db), payload: dict = Depends(verify_token)):
+    if payload.get("role") != "ADMIN":
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="You are not authorized to perform this action!")
+    return await evaluationService.manual_evaluate(submission_id, db, feedback)
+
 
 

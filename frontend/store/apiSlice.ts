@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { RootState } from "./store";
 
-import { RegisterData, loginCredentials, AuthResponse, Competition, Submission, User } from "@/types";
+import { RegisterData, loginCredentials, AuthResponse, Competition, Submission, User, ManualEvaluate } from "@/types";
 
 export const apiSlice = createApi({
     reducerPath: "api",
@@ -79,6 +79,16 @@ export const apiSlice = createApi({
             invalidatesTags: (result, error, id) => result ? [{ type: 'Submissions', id }] : []
         }),
 
+        manualEvaluateSubmission: builder.mutation<Submission, Partial<ManualEvaluate>>({
+            query: ({submission_id, feedback, score}) => ({
+                url: `/admin/manual_evaluate/${submission_id}`,
+                method: 'PUT',
+                body: {score, feedback}
+            }),
+            invalidatesTags: (result, error, { competition_id }) => [{ type: 'Submissions', id: competition_id },],
+        }),
+
+
 
         // Competitor
 
@@ -103,4 +113,4 @@ export const apiSlice = createApi({
 
 export const { useRegisterMutation, useLoginMutation,
      useCreateCompetitionMutation, useGetSubmissionsQuery,
-      useEvaluateCompetitionMutation, useGetCompetitionsQuery, useGetCompetitionQuery, useSubmitArticleMutation, useGetResultsQuery } = apiSlice
+      useEvaluateCompetitionMutation, useGetCompetitionsQuery, useGetCompetitionQuery, useSubmitArticleMutation, useGetResultsQuery, useManualEvaluateSubmissionMutation } = apiSlice

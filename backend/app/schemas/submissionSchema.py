@@ -21,4 +21,8 @@ class SubmissionRead(SubmissionBase):
 
     class Config:
         from_attributes = True
+
+class CompetitionFeedback(BaseModel):
+    score: int
+    feedback: str
     

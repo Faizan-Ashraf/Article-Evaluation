@@ -84,3 +84,11 @@ async def evaluate_submissions(db, competition_id: int):
 
     await submissionRepository.rank(submissions=submissions, db=db)
         
+
+async def manual_evaluate(submission_id: int, db: AsyncSession, feedback: submissionSchema.CompetitionFeedback):
+    data = await submissionRepository.get_by_id(db, submission_id)
+    if not data:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Submission not found!")
+    await submissionRepository.update_submission(db, feedback.score, feedback.feedback, submission_id)
+
+    return await submissionRepository.rank(db=db, competitionId=data.competition_id)

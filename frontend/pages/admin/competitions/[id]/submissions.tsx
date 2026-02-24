@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import ProtectedRoute from "@/components/protedtedRoutes";
 import { useState } from "react";
 import styles from "@/styles/Submissions.module.css"
+import Link from "next/link";
 
 
 
@@ -64,14 +65,16 @@ export default function Submissions() {
                                 <th>Submitted At</th>
                                 <th>Score</th>
                                 <th>Status</th>
-                                <th>Status</th>
                                 <th>Rank</th>
                             </tr>
                         </thead>
                         <tbody>
                             {submissions?.map((sub) => (
-                                <tr key={sub.id}>
+
+                                <tr onClick={()=>router.push(`/admin/competitions/${Number(competitionId)}/submissions/${Number(sub.id)}/evaluate`)}>
+
                                     <td title={sub.content}>{sub.content.substring(0, 50)}...</td>
+
                                     <td>{new Date(sub.submitted_at).toLocaleString()}</td>
                                     <td>{sub.score}</td>
                                     <td className={sub.status === "EVALUATED" ? styles.activeStatus : styles.inactiveStatus}>{sub.status}</td>
@@ -82,6 +85,6 @@ export default function Submissions() {
                     </table>
                 </div>
             </div>
-        </ProtectedRoute>
+        </ProtectedRoute >
     )
 }

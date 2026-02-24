@@ -17,6 +17,13 @@ export interface Competition {
     is_active: boolean;
 }
 
+export interface ManualEvaluate{
+    competition_id: number
+    submission_id: number
+    score: number
+    feedback: string
+}
+
 export interface Submission {
     id: number;
     content: string;
@@ -44,3 +51,4 @@ export interface RegisterData {
     email: string;
     password: string;
 }
+
