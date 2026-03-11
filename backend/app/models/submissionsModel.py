@@ -21,6 +21,7 @@ class Submission(Base):
     score = Column(Integer)
     evaluated_at = Column(DateTime(timezone=True))
     status = Column(SQLEnum(Status, name="status"), default=Status.PENDING)
+    rank = Column(Integer)
 
     competitor = relationship("User")
     competition = relationship("Competition")

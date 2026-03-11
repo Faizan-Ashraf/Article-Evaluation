@@ -17,7 +17,12 @@ class SubmissionRead(SubmissionBase):
     score: Optional[int] = None
     evaluated_at: Optional[datetime] = None
     status: str
+    rank: Optional[int] = None
 
     class Config:
         from_attributes = True
+
+class CompetitionFeedback(BaseModel):
+    score: int
+    feedback: str
     
